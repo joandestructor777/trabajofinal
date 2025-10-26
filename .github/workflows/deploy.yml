@@ -1,0 +1,29 @@
+name: Deploy MERN App
+
+on:
+  push:
+    branches:
+      - main   # Cada vez que hagas push a main, se desplegará solo
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_KEY }}" > ~/.ssh/server.pem
+        chmod 600 ~/.ssh/server.pem
+
+    - name: Deploy to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/server.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          cd mern-crud || git clone https://github.com/${{ github.repository }}.git mern-crud && cd mern-crud
+          git pull
+          docker-compose down || true
+          docker-compose up --build -d
+        EOF
