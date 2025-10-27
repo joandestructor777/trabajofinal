@@ -1,16 +1,33 @@
-FROM node:latest
+# Imagen base
+FROM node:20
 
-RUN mkdir -p /usr/src/app/react-src
+# Crear directorio de trabajo
 WORKDIR /usr/src/app
 
+# Instalar nodemon globalmente (solo si es desarrollo)
 RUN npm install -g nodemon
 
-COPY package.json /usr/src/app/
+# Copiar package.json y package-lock.json del backend
+COPY package*.json ./
+
+# Instalar dependencias del backend
 RUN npm install
 
-COPY react-src/package.json /usr/src/app/react-src
+# Copiar la carpeta del frontend
+COPY react-src ./react-src
+
+# Instalar dependencias del frontend
+WORKDIR /usr/src/app/react-src
 RUN npm install
 
-COPY . /usr/src/app
+# Volver al directorio raíz del backend
+WORKDIR /usr/src/app
 
-EXPOSE 3000 4200
+# Copiar todo lo demás
+COPY . .
+
+# Exponer el puerto del backend
+EXPOSE 5000
+
+# Comando para levantar backend con nodemon (desarrollo)
+CMD ["nodemon", "server.js"]
