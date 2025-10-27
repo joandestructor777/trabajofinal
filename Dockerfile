@@ -4,16 +4,14 @@ FROM node:20
 # Crear directorio de trabajo
 WORKDIR /usr/src/app
 
-# Copiar package.json y package-lock.json
+# Copiar e instalar dependencias backend
 COPY package*.json ./
-
-# Instalar dependencias backend
 RUN npm install
 
-# Copiar todo el backend
+# Copiar todo el proyecto
 COPY . .
 
-# Entrar al frontend y construirlo
+# Entrar al frontend, instalar y construir
 WORKDIR /usr/src/app/react-src
 RUN npm install
 RUN npm run build
@@ -21,12 +19,15 @@ RUN npm run build
 # Volver al backend
 WORKDIR /usr/src/app
 
-# Mover la build del frontend a la carpeta public o donde tu servidor la sirva
-RUN rm -rf ./public
-RUN mv react-src/build ./public
+# Borrar carpeta public existente
+RUN rm -rf public
 
-# Exponer el backend
+# Crear carpeta public y mover la build allí
+RUN mkdir public
+RUN mv react-src/build/* public/
+
+# Exponer backend
 EXPOSE 5000
 
-# Comando para iniciar backend en producción
+# Ejecutar en producción
 CMD ["node", "server.js"]
