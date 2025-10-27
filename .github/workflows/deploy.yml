@@ -1,33 +1,28 @@
-name: Deploy to EC2
+name: Deploy Node.js App to EC2
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main  # Cambia si tu rama principal tiene otro nombre
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Copy files to EC2
-        uses: appleboy/scp-action@v0.1.4
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.7.0
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: "."
-          target: "/home/ubuntu/app"
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Restart app on server
-        uses: appleboy/ssh-action@v1.1.0
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd /home/ubuntu/app
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@18.221.52.107 << 'EOF'
+            cd ~/app/trabajofinal
+            git pull origin main
             npm install
-            pm2 restart all || pm2 start index.js --name app
+            pm2 restart trabajofinal || pm2 start server.js --name trabajofinal
+          EOF
