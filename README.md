@@ -4,6 +4,8 @@ A simple records system using MongoDB, Express.js, React.js, and Node.js with re
 
 REST API was implemented on the back-end. Semantic UI React was used for the UI in the front-end.
 
+aqui podemos hacer uan prueba de nuestro actions
+
 ![Node Version](https://img.shields.io/badge/node-v20+-green.svg)
 ![NPM Version](https://img.shields.io/badge/npm-v9+-blue.svg)
 ![MongoDB Version](https://img.shields.io/badge/mongodb-v7+-yellowgreen.svg)
