@@ -30,4 +30,4 @@ COPY . .
 EXPOSE 5000
 
 # Comando para levantar backend con nodemon (desarrollo)
-CMD ["nodemon", "server.js"]
+CMD ["node", "server.js"]
