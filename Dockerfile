@@ -1,31 +1,19 @@
-# Imagen base
 FROM node:20
 
-# Crear directorio de trabajo backend
+# Crear carpeta de app
 WORKDIR /usr/src/app
 
-# Copiar e instalar dependencias backend
+# Copiar los package.json
 COPY package*.json ./
+
+# Instalar dependencias
 RUN npm install
 
 # Copiar todo el proyecto
 COPY . .
 
-# Entrar al frontend, instalar y construir
-WORKDIR /usr/src/app/react-src
-RUN npm install
-RUN npm run build
-
-# Volver al backend
-WORKDIR /usr/src/app
-
-# Reemplazar carpeta public con la compilación del frontend (Vite usa dist)
-RUN rm -rf public
-RUN mkdir public
-RUN cp -r react-src/dist/* public/
-
-# Exponer backend
+# Exponer el puerto de tu backend
 EXPOSE 5000
 
-# Ejecutar backend
+# Ejecutar la app
 CMD ["node", "server.js"]
