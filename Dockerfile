@@ -1,7 +1,7 @@
 # Imagen base
 FROM node:20
 
-# Crear directorio de trabajo
+# Crear directorio de trabajo backend
 WORKDIR /usr/src/app
 
 # Copiar e instalar dependencias backend
@@ -19,15 +19,13 @@ RUN npm run build
 # Volver al backend
 WORKDIR /usr/src/app
 
-# Borrar carpeta public existente
+# Reemplazar carpeta public con la compilación del frontend (Vite usa dist)
 RUN rm -rf public
-
-# Crear carpeta public y mover la build allí
 RUN mkdir public
-RUN mv react-src/build/* public/
+RUN cp -r react-src/dist/* public/
 
 # Exponer backend
 EXPOSE 5000
 
-# Ejecutar en producción
+# Ejecutar backend
 CMD ["node", "server.js"]
