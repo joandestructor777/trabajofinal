@@ -205,14 +205,4 @@ npm start
 
 ---
 
-## 📎 Enlaces
-| Recurso | URL |
-|--------|-----|
-| Repositorio GitHub | *(agregar aquí)* |
-| GitHub Project | *(agregar aquí)* |
-| Servidor AWS EC2 | *(agregar aquí)* |
-| Docker Hub | *(opcional)* |
-
----
-
 Hecho con dedicación, sudor, café y cero ganas de repetirlo. 💀🔥
